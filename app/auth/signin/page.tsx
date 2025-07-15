@@ -29,7 +29,7 @@ export default function SignIn() {
         router.push("/");
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       // setError("An error occurred. Please try again."); // This line was removed as per the edit hint.
     } finally {
       setIsLoading(false);
