@@ -7,16 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
     try {
       const result = await signIn("credentials", {
         email,
@@ -24,13 +27,13 @@ export default function SignIn() {
         redirect: false,
       });
       if (result?.error) {
-        // setError("Invalid email or password"); // This line was removed as per the edit hint.
+        setError("Invalid email or password");
       } else {
         router.push("/");
         router.refresh();
       }
     } catch {
-      // setError("An error occurred. Please try again."); // This line was removed as per the edit hint.
+      setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -47,6 +50,11 @@ export default function SignIn() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <Alert>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
